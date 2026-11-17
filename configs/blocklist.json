@@ -1,0 +1,55 @@
+{
+  "mumu": {
+    "name": "MuMu Player 12 / Nx",
+    "default_port": 16384,
+    "fallback_port": 7555,
+    "packages_to_disable": [
+      "com.mumu.store",
+      "com.mumu.acc",
+      "com.nemu.oaidmanager",
+      "com.mumu.shared.sdk",
+      "com.netease.mumu.cloner",
+      "com.android.adservices.api",
+      "com.android.ondevicepersonalization.services",
+      "com.android.federatedcompute.services",
+      "com.android.sdksandbox"
+    ],
+    "launcher_db": "/data/data/app.lawnchair/databases/launcher_4_7_4_1.db",
+    "launcher_package": "app.lawnchair"
+  },
+  "ldplayer": {
+    "name": "LDPlayer 9",
+    "default_port": 5555,
+    "fallback_port": 5554,
+    "packages_to_disable": [
+      "com.android.flysilkworm",
+      "com.google.android.inputmethod.pinyin",
+      "com.cyanogenmod.filemanager",
+      "com.android.adservices.api"
+    ],
+    "launcher_package": "com.android.launcher3"
+  },
+  "bluestacks": {
+    "name": "BlueStacks 5",
+    "default_port": 5555,
+    "fallback_port": 5556,
+    "packages_to_disable": [
+      "com.bluestacks.gamepedia",
+      "com.bluestacks.home",
+      "com.bluestacks.settings",
+      "com.android.adservices.api"
+    ],
+    "launcher_package": "com.bluestacks.home"
+  },
+  "nox": {
+    "name": "Nox Player",
+    "default_port": 62001,
+    "fallback_port": 5555,
+    "packages_to_disable": [
+      "com.bignox.app.store",
+      "com.bignox.app.center",
+      "com.android.adservices.api"
+    ],
+    "launcher_package": "com.android.launcher3"
+  }
+}

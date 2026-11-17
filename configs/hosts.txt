@@ -1,0 +1,32 @@
+# EmuPure Consolidated Emulator Ad & Telemetry Blocklist
+127.0.0.1 localhost
+::1 ip6-localhost
+
+# === MuMu Player (NetEase) ===
+0.0.0.0 mumu-global.fp.ps.easebar.com
+0.0.0.0 store-api.mumuglobal.com
+0.0.0.0 adl.easebar.com
+0.0.0.0 hub.mumuglobal.com
+0.0.0.0 notice.mumuglobal.com
+0.0.0.0 adlog.mumuglobal.com
+0.0.0.0 report.mumu.163.com
+0.0.0.0 api.mumu.163.com
+0.0.0.0 g11.gdl.netease.com
+
+# === LDPlayer ===
+0.0.0.0 ad.ldmnq.com
+0.0.0.0 admarket.ldmnq.com
+0.0.0.0 push.ldmnq.com
+0.0.0.0 res.ldmnq.com
+0.0.0.0 loc.ldmnq.com
+0.0.0.0 notice.ldmnq.com
+
+# === BlueStacks ===
+0.0.0.0 cloud.bluestacks.com
+0.0.0.0 ads.bluestacks.com
+0.0.0.0 static-app.bluestacks.com
+
+# === Nox Player ===
+0.0.0.0 api.bignox.com
+0.0.0.0 res01.bignox.com
+0.0.0.0 log.bignox.com
