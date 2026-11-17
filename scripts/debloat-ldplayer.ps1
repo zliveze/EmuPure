@@ -52,3 +52,4 @@ foreach ($pkg in $ldBloat) {
 }
 
 Write-Host "`n[+] LDPlayer debloated successfully." -ForegroundColor Green
+

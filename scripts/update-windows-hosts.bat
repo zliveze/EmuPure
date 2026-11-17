@@ -46,3 +46,4 @@ ipconfig /flushdns >nul
 echo [+] Done! Hosts file has been updated and DNS refreshed.
 echo.
 pause
+

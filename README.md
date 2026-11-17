@@ -81,7 +81,8 @@ powershell -ExecutionPolicy Bypass -File .\EmuPure.ps1
    - `com.android.adservices.api` *(Android 15 Privacy Sandbox tracking)*
    - `com.android.ondevicepersonalization.services`
    - `com.android.federatedcompute.services`
-   - `com.android.sdksandbox`
+
+   > ⚠️ **NEVER disable `com.android.sdksandbox`** on Android 15: `PackageManagerService` requires exactly one SDK sandbox package at boot. Disabling it crash-loops `system_server` and **MuMu Player hangs forever at 98%**. EmuPure explicitly re-enables it on every run as a self-heal.
 3. **Cleans Launcher Database**: Connects directly to SQLite `launcher_4_7_4_1.db` to remove fake Chrome/Amaze/Arknights promo shortcuts.
 4. **Binds Ad-Blocking Hosts**: Redirects NetEase/MuMu ad servers (`easebar.com`, `mumuglobal.com`, `163.com`) to `0.0.0.0`.
 5. **Boot Persistence (`/data/adb/service.d/debloat.sh`)**: Ensures optimizations automatically re-apply on every reboot.
@@ -101,12 +102,28 @@ EmuPure/
 │   ├── debloat-mumu.ps1         # Dedicated MuMu Player debloater
 │   ├── debloat-ldplayer.ps1     # LDPlayer 9 debloater
 │   ├── debloat-bluestacks.ps1   # BlueStacks 5 debloater
+│   ├── recover-stuck-mumu.py    # Rescue: MuMu stuck at 98% (Android 15)
 │   └── update-windows-hosts.bat # Windows hosts ad blocker
 ├── configs/
 │   ├── hosts.txt                # Consolidated emulator ad-block domain list
 │   └── blocklist.json           # Package blocklists per emulator
 └── LICENSE                      # MIT License
 ```
+
+---
+
+## 🚑 Rescue: MuMu stuck at 98%?
+
+If MuMu Player hangs forever at 98% (Android 15), `com.android.sdksandbox` was
+disabled — `system_server` cannot boot. While the VM is stuck, `adb shell pm
+enable` does **not** work (PackageManagerService is dead). Run:
+
+```bash
+python scripts/recover-stuck-mumu.py
+```
+
+It re-enables the package via MuMu's `mumu-cli` (works even while stuck), then
+restart MuMu Player and it will boot normally.
 
 ---
 
@@ -131,3 +148,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <div align="center">
   <b>Developed with ❤️ by <a href="https://github.com/zliveze">zliveze</a></b>
 </div>
+

@@ -67,11 +67,24 @@ powershell -ExecutionPolicy Bypass -File .\EmuPure.ps1
    - `com.android.adservices.api` *(Privacy Sandbox quảng cáo của Android 15)*
    - `com.android.ondevicepersonalization.services`
    - `com.android.federatedcompute.services`
-   - `com.android.sdksandbox`
+
+   > ⚠️ **TUYỆT ĐỐI KHÔNG disable `com.android.sdksandbox`** trên Android 15: `PackageManagerService` yêu cầu đúng 1 SDK sandbox package khi khởi động. Disable nó sẽ khiến `system_server` crash loop và **MuMu Player kẹt vĩnh viễn ở 98%**. EmuPure tự bật lại package này mỗi lần chạy.
 3. **Dọn sạch Database Launcher**: Kết nối SQLite `launcher_4_7_4_1.db` để xóa sạch các icon quảng cáo Chrome giả, Amaze giả và gợi ý tải game.
 4. **Chặn Domain Quảng Cáo**: Trỏ toàn bộ domain telemetry (`easebar.com`, `mumuglobal.com`, `163.com`) về `0.0.0.0`.
 5. **Duy trì tự động khi khởi động lại (`/data/adb/service.d/debloat.sh`)**: Tích hợp boot script của KernelSU để máy ảo luôn sạch bóng sau mỗi lần bật lại.
 6. **Tối ưu tốc độ chuyển cảnh**: Thiết lập hệ số animation scale về `0.5x` giúp phản hồi tức thì, mượt mà tối đa khi vào game.
+
+---
+
+## 🚑 Cách cứu hộ khi MuMu kẹt 98%
+
+Nếu MuMu Player đứng vĩnh viễn ở 98% (Android 15), nguyên nhân là `com.android.sdksandbox` đã bị disable khiến `system_server` không thể khởi động. Khi máy đang kẹt, `adb shell pm enable` **không có tác dụng** (PackageManagerService đã chết). Hãy chạy:
+
+```bash
+python scripts/recover-stuck-mumu.py
+```
+
+Script này bật lại package qua `mumu-cli` của MuMu (chạy được cả khi đang kẹt), sau đó tắt và mở lại MuMu Player là máy sẽ boot bình thường.
 
 ---
 
@@ -90,3 +103,4 @@ Dự án phát hành dưới giấy phép MIT License.
 <div align="center">
   <b>Phát triển bởi <a href="https://github.com/zliveze">zliveze</a></b>
 </div>
+

@@ -9,7 +9,7 @@
 Mở **PowerShell** trên Windows và dán toàn bộ đoạn code dưới đây rồi bấm `Enter`. Hệ thống sẽ tự động tìm ADB, kết nối MuMu Player, gỡ sạch rác và tối ưu trong 3 giây:
 
 ```powershell
-$adb = "D:\Program Files\Netease\MuMuPlayer\nx_device\15.0\shell\adb.exe"; if (-not (Test-Path $adb)) { $adb = "C:\Program Files\Netease\MuMuPlayer\nx_device\15.0\shell\adb.exe" }; & $adb connect 127.0.0.1:16384; & $adb -s 127.0.0.1:16384 root; Start-Sleep -s 1; @("com.mumu.store","com.mumu.acc","com.nemu.oaidmanager","com.mumu.shared.sdk","com.netease.mumu.cloner","com.android.adservices.api","com.android.ondevicepersonalization.services","com.android.federatedcompute.services","com.android.sdksandbox") | ForEach-Object { & $adb -s 127.0.0.1:16384 shell "pm disable-user --user 0 $_ 2>/dev/null; am force-stop $_ 2>/dev/null" }; & $adb -s 127.0.0.1:16384 shell "sqlite3 /data/data/app.lawnchair/databases/launcher_4_7_4_1.db \"DELETE FROM favorites WHERE intent LIKE '%easebar%' OR intent LIKE '%mumu.store%' OR intent LIKE '%Arknights%';\" 2>/dev/null; am force-stop app.lawnchair 2>/dev/null"; & $adb -s 127.0.0.1:16384 shell "mkdir -p /data/adb/service.d; echo '127.0.0.1 localhost`n::1 ip6-localhost`n0.0.0.0 mumu-global.fp.ps.easebar.com`n0.0.0.0 store-api.mumuglobal.com`n0.0.0.0 adl.easebar.com`n0.0.0.0 hub.mumuglobal.com`n0.0.0.0 notice.mumuglobal.com`n0.0.0.0 adlog.mumuglobal.com`n0.0.0.0 report.mumu.163.com`n0.0.0.0 api.mumu.163.com' > /data/adb/hosts; mount -o bind /data/adb/hosts /system/etc/hosts; echo '#!/system/bin/sh`nsleep 5`nmount -o bind /data/adb/hosts /system/etc/hosts`nfor p in com.mumu.store com.mumu.acc com.nemu.oaidmanager com.mumu.shared.sdk com.netease.mumu.cloner com.android.adservices.api; do pm disable-user --user 0 `$p; am force-stop `$p; done' > /data/adb/service.d/debloat.sh; chmod 755 /data/adb/service.d/debloat.sh; settings put global window_animation_scale 0.5; settings put global transition_animation_scale 0.5; settings put global animator_duration_scale 0.5"; Write-Host "`n[HOAN TAT] MuMu Player da duoc toi uu hoa sach se 100%!" -ForegroundColor Green
+$adb = "D:\Program Files\Netease\MuMuPlayer\nx_device\15.0\shell\adb.exe"; if (-not (Test-Path $adb)) { $adb = "C:\Program Files\Netease\MuMuPlayer\nx_device\15.0\shell\adb.exe" }; & $adb connect 127.0.0.1:16384; & $adb -s 127.0.0.1:16384 root; Start-Sleep -s 1; & $adb -s 127.0.0.1:16384 shell "pm enable com.android.sdksandbox 2>/dev/null"; @("com.mumu.store","com.mumu.acc","com.nemu.oaidmanager","com.mumu.shared.sdk","com.netease.mumu.cloner","com.android.adservices.api","com.android.ondevicepersonalization.services","com.android.federatedcompute.services") | ForEach-Object { & $adb -s 127.0.0.1:16384 shell "pm disable-user --user 0 $_ 2>/dev/null; am force-stop $_ 2>/dev/null" }; & $adb -s 127.0.0.1:16384 shell "sqlite3 /data/data/app.lawnchair/databases/launcher_4_7_4_1.db \"DELETE FROM favorites WHERE intent LIKE '%easebar%' OR intent LIKE '%mumu.store%' OR intent LIKE '%Arknights%';\" 2>/dev/null; am force-stop app.lawnchair 2>/dev/null"; & $adb -s 127.0.0.1:16384 shell "mkdir -p /data/adb/service.d; echo '127.0.0.1 localhost`n::1 ip6-localhost`n0.0.0.0 mumu-global.fp.ps.easebar.com`n0.0.0.0 store-api.mumuglobal.com`n0.0.0.0 adl.easebar.com`n0.0.0.0 hub.mumuglobal.com`n0.0.0.0 notice.mumuglobal.com`n0.0.0.0 adlog.mumuglobal.com`n0.0.0.0 report.mumu.163.com`n0.0.0.0 api.mumu.163.com' > /data/adb/hosts; mount -o bind /data/adb/hosts /system/etc/hosts; echo '#!/system/bin/sh`nsleep 5`npm enable com.android.sdksandbox 2>/dev/null`nmount -o bind /data/adb/hosts /system/etc/hosts`nfor p in com.mumu.store com.mumu.acc com.nemu.oaidmanager com.mumu.shared.sdk com.netease.mumu.cloner com.android.adservices.api; do pm disable-user --user 0 `$p; am force-stop `$p; done' > /data/adb/service.d/debloat.sh; chmod 755 /data/adb/service.d/debloat.sh; settings put global window_animation_scale 0.5; settings put global transition_animation_scale 0.5; settings put global animator_duration_scale 0.5"; Write-Host "`n[HOAN TAT] MuMu Player da duoc toi uu hoa sach se 100%!" -ForegroundColor Green
 ```
 
 ---
@@ -34,12 +34,17 @@ adb -s 127.0.0.1:16384 shell pm disable-user --user 0 com.netease.mumu.cloner
 adb -s 127.0.0.1:16384 shell pm disable-user --user 0 com.android.adservices.api
 adb -s 127.0.0.1:16384 shell pm disable-user --user 0 com.android.ondevicepersonalization.services
 adb -s 127.0.0.1:16384 shell pm disable-user --user 0 com.android.federatedcompute.services
-adb -s 127.0.0.1:16384 shell pm disable-user --user 0 com.android.sdksandbox
 ```
+
+> ⚠️ **CẢNH BÁO**: TUYỆT ĐỐI KHÔNG disable `com.android.sdksandbox`!
+> Trên Android 15, `PackageManagerService` yêu cầu đúng 1 SDK sandbox package khi khởi động. Disable nó sẽ khiến `system_server` crash loop liên tục và **MuMu Player kẹt vĩnh viễn ở 98%**. Nếu trước đó bạn đã lỡ disable, hãy bật lại:
+> ```bash
+> adb -s 127.0.0.1:16384 shell pm enable com.android.sdksandbox
+> ```
 
 ### Bước 3: Dọn sạch icon quảng cáo ngoài màn hình chính (Lawnchair Launcher)
 ```bash
-adb -s 127.0.0.1:16384 shell "sqlite3 /data/data/app.lawnchair/databases/launcher_4_7_4_1.db \"DELETE FROM favorites WHERE intent LIKE '%easebar%' OR intent LIKE '%mumu.store%' OR intent LIKE '%Arknights%';\""
+adb -s 127.0.0.1:16384 shell "sqlite3 /data/data/app.lawnchair/databases/launcher_4_7_4_1.db \"DELETE FROM favorites WHERE intent LIKE '%easebar%' OR intent LIKE '%mumu.store%';\""
 adb -s 127.0.0.1:16384 shell am force-stop app.lawnchair
 ```
 
@@ -66,10 +71,11 @@ adb -s 127.0.0.1:16384 shell "mount -o bind /data/adb/hosts /system/etc/hosts"
 adb -s 127.0.0.1:16384 shell "cat << 'EOF' > /data/adb/service.d/debloat.sh
 #!/system/bin/sh
 sleep 5
+pm enable com.android.sdksandbox >/dev/null 2>&1
 if [ -f /data/adb/hosts ]; then
     mount -o bind /data/adb/hosts /system/etc/hosts
 fi
-PACKAGES=\"com.mumu.store com.mumu.acc com.nemu.oaidmanager com.mumu.shared.sdk com.netease.mumu.cloner com.android.adservices.api com.android.ondevicepersonalization.services com.android.federatedcompute.services com.android.sdksandbox\"
+PACKAGES=\"com.mumu.store com.mumu.acc com.nemu.oaidmanager com.mumu.shared.sdk com.netease.mumu.cloner com.android.adservices.api com.android.ondevicepersonalization.services com.android.federatedcompute.services\"
 for pkg in \$PACKAGES; do
     pm disable-user --user 0 \$pkg >/dev/null 2>&1
     am force-stop \$pkg >/dev/null 2>&1
@@ -102,3 +108,4 @@ adb -s 127.0.0.1:16384 shell settings put global animator_duration_scale 0.5
    0.0.0.0 hub.mumuglobal.com
    ```
 3. Chạy lệnh: `ipconfig /flushdns`.
+

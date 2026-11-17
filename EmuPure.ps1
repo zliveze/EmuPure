@@ -83,3 +83,4 @@ switch ($choice) {
         Start-Process -FilePath "cmd.exe" -ArgumentList "/c `"$scriptsDir\update-windows-hosts.bat`"" -Verb RunAs
     }
 }
+

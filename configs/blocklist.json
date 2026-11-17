@@ -11,7 +11,9 @@
       "com.netease.mumu.cloner",
       "com.android.adservices.api",
       "com.android.ondevicepersonalization.services",
-      "com.android.federatedcompute.services",
+      "com.android.federatedcompute.services"
+    ],
+    "packages_never_disable": [
       "com.android.sdksandbox"
     ],
     "launcher_db": "/data/data/app.lawnchair/databases/launcher_4_7_4_1.db",
@@ -53,3 +55,4 @@
     "launcher_package": "com.android.launcher3"
   }
 }
+

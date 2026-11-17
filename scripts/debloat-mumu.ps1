@@ -68,6 +68,9 @@ if ($idOut -notmatch "uid=0") {
 }
 
 # 4. Disable Bloatware Packages
+# CRITICAL: com.android.sdksandbox must NEVER be disabled on Android 15.
+# PackageManagerService requires exactly one SDK sandbox package at boot;
+# disabling it crash-loops system_server and MuMu Player hangs at 98%.
 $bloatPackages = @(
     "com.mumu.store",
     "com.mumu.acc",
@@ -76,9 +79,12 @@ $bloatPackages = @(
     "com.netease.mumu.cloner",
     "com.android.adservices.api",
     "com.android.ondevicepersonalization.services",
-    "com.android.federatedcompute.services",
-    "com.android.sdksandbox"
+    "com.android.federatedcompute.services"
 )
+
+Write-Host "`n[*] Self-healing boot-critical packages..." -ForegroundColor Cyan
+& $adb -s $targetDevice shell "pm enable com.android.sdksandbox 2>/dev/null" | Out-Null
+Write-Host "    [+] com.android.sdksandbox ensured ENABLED (required by Android 15)." -ForegroundColor Green
 
 Write-Host "`n[*] Disabling bloatware packages..." -ForegroundColor Cyan
 foreach ($pkg in $bloatPackages) {
@@ -91,7 +97,11 @@ foreach ($pkg in $bloatPackages) {
 Write-Host "`n[*] Purging adware shortcuts from Lawnchair launcher..." -ForegroundColor Cyan
 $launcherDb = "/data/data/app.lawnchair/databases/launcher_4_7_4_1.db"
 $cleanSql = "DELETE FROM favorites WHERE intent LIKE '%easebar%' OR intent LIKE '%mumu.store%' OR intent LIKE '%Arknights%';"
-& $adb -s $targetDevice shell "sqlite3 $launcherDb `"$cleanSql`" 2>/dev/null"
+$tempSql = "$env:TEMP\emupure_clean.sql"
+[System.IO.File]::WriteAllText($tempSql, $cleanSql)
+& $adb -s $targetDevice push $tempSql /data/local/tmp/emupure_clean.sql | Out-Null
+& $adb -s $targetDevice shell "sqlite3 $launcherDb < /data/local/tmp/emupure_clean.sql 2>/dev/null; rm -f /data/local/tmp/emupure_clean.sql"
+Remove-Item $tempSql -ErrorAction SilentlyContinue
 & $adb -s $targetDevice shell "am force-stop app.lawnchair 2>/dev/null"
 Write-Host "[+] Launcher database cleaned & refreshed." -ForegroundColor Green
 
@@ -122,10 +132,13 @@ Write-Host "`n[*] Installing boot persistence service (/data/adb/service.d/deblo
 $bootScript = @'
 #!/system/bin/sh
 sleep 5
+# SELF-HEAL: com.android.sdksandbox must stay enabled on Android 15.
+# Disabling it crash-loops system_server (MuMu stuck at 98%).
+pm enable com.android.sdksandbox >/dev/null 2>&1
 if [ -f /data/adb/hosts ]; then
     mount -o bind /data/adb/hosts /system/etc/hosts
 fi
-PACKAGES="com.mumu.store com.mumu.acc com.nemu.oaidmanager com.mumu.shared.sdk com.netease.mumu.cloner com.android.adservices.api com.android.ondevicepersonalization.services com.android.federatedcompute.services com.android.sdksandbox"
+PACKAGES="com.mumu.store com.mumu.acc com.nemu.oaidmanager com.mumu.shared.sdk com.netease.mumu.cloner com.android.adservices.api com.android.ondevicepersonalization.services com.android.federatedcompute.services"
 for pkg in $PACKAGES; do
     pm disable-user --user 0 $pkg >/dev/null 2>&1
     am force-stop $pkg >/dev/null 2>&1
@@ -153,3 +166,4 @@ Write-Host "[+] Animation scales set to 0.5x." -ForegroundColor Green
 Write-Host "`n==========================================================" -ForegroundColor Green
 Write-Host "[SUCCESS] MuMu Player debloated and optimized successfully!" -ForegroundColor Green
 Write-Host "==========================================================" -ForegroundColor Green
+

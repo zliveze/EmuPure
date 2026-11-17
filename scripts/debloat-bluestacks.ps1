@@ -49,3 +49,4 @@ foreach ($pkg in $bsBloat) {
 }
 
 Write-Host "`n[+] BlueStacks debloated successfully." -ForegroundColor Green
+
